@@ -4,7 +4,7 @@ authors = ["theschitz <17023248+theschitz@users.noreply.github.com>"]
 description = "Serializing & deserializing Xliff with Rust as WebAssembly"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/theschitz/r-xlf"
-version = "0.1.0"
+version = "0.1.20220225091500"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
