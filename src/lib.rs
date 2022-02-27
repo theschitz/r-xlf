@@ -40,34 +40,25 @@ pub fn json_to_xlf(json: String) -> String {
     return quick_xml::se::to_string(&deserialized).unwrap()
 }
 
-// #[wasm_bindgen]
-// extern {
-//     pub fn alert(s: &str);
-// }
 
-// #[wasm_bindgen]
-// pub fn greet(name: &str) {
-//     // alert(&format!("Hello, {}!", name));
-//     alert(&format!("{}", xlf_to_min_json(r#"<?xml version="1.0" encoding="utf-8"?>
-//     <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-//       <file datatype="xml" source-language="en-US" target-language="sv-SE" original="AlTestApp">
-//         <body>
-//           <group id="body">
-//             <trans-unit id="Table 2328808854 - NamedType 12557645" size-unit="char" maxwidth="50" translate="yes" xml:space="preserve">
-//               <source>This is a test</source>
-//               <target state="final" state-qualifier="exact-match">Detta är ett test</target>
-//               <note from="Developer" annotates="general" priority="2">Some kind of Dev note</note>
-//               <note from="Xliff Generator" annotates="general" priority="3">Table MyTable - NamedType TestErr</note>
-//               <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source has been modified.</note>
-//             </trans-unit>
-//             <trans-unit id="Page 2931038265 - NamedType 12557645" size-unit="char" translate="yes" xml:space="preserve">
-//               <source>Cool</source>
-//               <target>Sval</target>
-//               <note from="Developer" annotates="general" priority="2"/>
-//               <note from="Xliff Generator" annotates="general" priority="3">Page MyPage - NamedType TestErr</note>
-//             </trans-unit>
-//           </group>
-//         </body>
-//       </file>
-//     </xliff>"#.to_string())));
-// }
+fn sample_xlf() -> &'static str {
+    return r#"<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd"><file datatype="xml" source-language="en-US" target-language="sv-SE" original="Al"><body><group id="body"><trans-unit id="Table 596208023 - Property 2879900210" maxwidth="23" size-unit="char" translate="yes" xml:space="preserve"><source>State</source><note from="Developer" annotates="general" priority="2">TableComment</note><note from="Xliff Generator" annotates="general" priority="3">Table NAB Test Table - Property Caption</note></trans-unit><trans-unit id="Table 596208023 - Field 440443472 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve"><source>Field</source><target>asdf</target><note from="Developer" annotates="general" priority="2"></note><note from="Xliff Generator" annotates="general" priority="3">Table NAB Test Table - Field Test Field - Property Caption</note></trans-unit></group></body></file></xliff>"#;
+    // return r#"<?xml version="1.0" encoding="utf-8"?><xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd"><file datatype="xml" source-language="en-US" target-language="sv-SE" original="Al"><body><group id="body"><trans-unit id="Table 596208023 - Property 2879900210" maxwidth="23" size-unit="char" translate="yes" xml:space="preserve"><source>State</source><note from="Developer" annotates="general" priority="2">TableComment</note><note from="Xliff Generator" annotates="general" priority="3">Table NAB Test Table - Property Caption</note></trans-unit><trans-unit id="Table 596208023 - Field 440443472 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve"><source>Field</source><target>asdf</target><note from="Developer" annotates="general" priority="2"></note><note from="Xliff Generator" annotates="general" priority="3">Table NAB Test Table - Field Test Field - Property Caption</note></trans-unit></group></body></file></xliff>"#;
+}
+
+fn sample_json() -> &'static str {
+    return r#"{"version":"1.2","xmlns":"urn:oasis:names:tc:xliff:document:1.2","xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance","xsi:schemaLocation":"urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd","file":{"datatype":"xml","source-language":"en-US","target-language":"sv-SE","original":"Al","body":{"group":[{"id":"body","trans-unit":[{"id":"Table 596208023 - Property 2879900210","maxwidth":"23","size-unit":"char","translate":"yes","xml:space":"preserve","source":{"$value":"State"},"target":null,"note":[{"from":"Developer","priority":"2","annotates":"general","$value":"TableComment"},{"from":"Xliff Generator","priority":"3","annotates":"general","$value":"Table NAB Test Table - Property Caption"}]},{"id":"Table 596208023 - Field 440443472 - Property 2879900210","maxwidth":null,"size-unit":"char","translate":"yes","xml:space":"preserve","source":{"$value":"Field"},"target":{"state":null,"$value":"asdf"},"note":[{"from":"Developer","priority":"2","annotates":"general","$value":null},{"from":"Xliff Generator","priority":"3","annotates":"general","$value":"Table NAB Test Table - Field Test Field - Property Caption"}]}]}]}}}"#
+}
+
+#[test]
+fn test_xlf_to_json() {
+    let json = xlf_to_json(sample_xlf().to_string());
+    // println!("{}",json );
+    assert_eq!(json,sample_json().to_string(), "Unexpected JSON.");
+}
+
+#[test]
+fn test_json_to_xlf() {
+    let xml = json_to_xlf(sample_json().to_string());
+    assert_eq!(xml, sample_xlf(), "Unexpected XML.");
+}
