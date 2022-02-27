@@ -13,6 +13,7 @@ struct Source {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 struct Target {
+    #[serde(skip_serializing_if = "Option::is_none")]
     state: Option<String>,
     #[serde(rename = "$value", default)]
     value: String
@@ -21,6 +22,8 @@ struct Target {
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 struct Note {
     from: Option<String>,
+    annotates: Option<String>,
+    priority: Option<String>,
     #[serde(rename = "$value", default)]
     value: Option<String>
 }
@@ -28,6 +31,14 @@ struct Note {
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 struct TransUnit {
     id: Option<String>,
+    #[serde(rename = "maxwidth", default, skip_serializing_if = "Option::is_none")]
+    maxwidth: Option<String>,
+    #[serde(rename = "size-unit", default, skip_serializing_if = "Option::is_none")]
+    size_unit: Option<String>,
+    #[serde(rename = "translate", default, skip_serializing_if = "Option::is_none")]
+    translate: Option<String>,
+    #[serde(rename = "xml:space", default, skip_serializing_if = "Option::is_none")]
+    xml_space: Option<String>,
     source: Source,
     target: Option<Target>,
     #[serde(rename = "note", default)]
@@ -58,10 +69,13 @@ struct File {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename(serialize = "xliff"))]
 pub struct Xliff {
     version: String,
     xmlns: String,
     #[serde(rename = "xmlns:xsi", default)]
     xmlns_xsi: String,
+    #[serde(rename = "xsi:schemaLocation", default)]
+    schema_location: String,
     file: File
 }
